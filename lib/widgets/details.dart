@@ -10,6 +10,7 @@ class Details extends StatelessWidget {
     int tempMax = weatherData['main']['temp_max'].toInt();
     int tempMin = weatherData['main']['temp_min'].toInt();
     int humidity = weatherData['main']['humidity'].toInt();
+    double pressure = weatherData['main']['pressure'].toInt() / 1000;
     double visibilityDouble = weatherData['visibility'].toInt() / 1000;
     int visibility = visibilityDouble.toInt();
 
@@ -20,9 +21,10 @@ class Details extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Current details'),
+            Text('Current details', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
             SizedBox(
               height: 24,
             ),
@@ -31,27 +33,33 @@ class Details extends StatelessWidget {
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Temp Max'),
-                      Text('Temp Min'),
-                      Text('Humidity'),
-                      Text('Pressure'),
-                      Text('Visibility'),
+                      textDetails('Temp Max'),
+                      SizedBox(height: 8.0,),
+                      textDetails('Temp Min'),
+                      SizedBox(height: 8.0,),
+                      textDetails('Humidity'),
+                      SizedBox(height: 8.0,),
+                      textDetails('Pressure'),
+                      SizedBox(height: 8.0,),
+                      textDetails('Visibility'),
                     ],
                   ),
                 ),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(tempMax.toString()),
-                      Text(tempMin.toString()),
-                      Text(humidity.toString() + '%'),
-                      Text(weatherData['main']['pressure'].toString()),
-                      Text(visibility.toString() + ' km'),
+                      textDetails(tempMax.toString() + "°C"),
+                      SizedBox(height: 8.0,),
+                      textDetails(tempMin.toString() + "°C"),
+                      SizedBox(height: 8.0,),
+                      textDetails(humidity.toString() + '%'),
+                      SizedBox(height: 8.0,),
+                      textDetails(pressure.toString() + ' mBar'),
+                      SizedBox(height: 8.0,),
+                      textDetails(visibility.toString() + ' km'),
                     ],
                   ),
                 )
@@ -61,5 +69,9 @@ class Details extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget textDetails(String text){
+    return Text(text, style: TextStyle(fontSize: 16.0),);
   }
 }

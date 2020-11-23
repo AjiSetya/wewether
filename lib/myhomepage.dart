@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'services/weather_services.dart';
 import 'widgets/details.dart';
@@ -25,35 +26,38 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     int temperature = weatherData['main']['temp'].toInt();
+    var now = new DateTime.now();
+    var formatter = new DateFormat('E, d MMMM');
+    String formattedDate = formatter.format(now);
 
     return Scaffold(
       body: Stack(
         children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(WeatherServices()
+                    .getWeatherBackground(weatherData['weather'][0]
+                ['main']
+                    .toString())),
+              ),
+            ),
+          ),
           SingleChildScrollView(
             child: Column(
               children: [
                 Stack(
                   children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(WeatherServices()
-                              .getWeatherBackground(weatherData['weather'][0]
-                                      ['main']
-                                  .toString())),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 140, left: 20, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Sunday, 22 Nov",
+                          Text(formattedDate,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           Row(
@@ -94,6 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                   ],
                 ),
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                )
               ],
             ),
           ),
@@ -131,26 +138,28 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Ubah Lokasi"),
+            title: Text("Change Location"),
             content: TextField(
               onChanged: (value) {
                 cityName = value;
               },
-              decoration: InputDecoration(hintText: "Lokasi"),
+              decoration: InputDecoration(hintText: "Location"),
             ),
             actions: <Widget>[
               new FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: new Text("Batal")),
+                  child: new Text("Cancel")),
               new FlatButton(
-                  onPressed: () => Navigator.pop(context, () {
-                        setState(() async {
-                          weatherData =
-                              await WeatherServices().getCityWeather(cityName);
+                  onPressed: () async {
+                    var weather = await WeatherServices().getCityWeather(cityName);
+                        setState(()  {
+                          weatherData = weather;
                         });
-                      }),
+
+                        Navigator.pop(context);
+                      },
                   child: new Text("Ok")),
             ],
             shape: RoundedRectangleBorder(

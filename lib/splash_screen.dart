@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void getLocationData() async {
-    var weatherData = await WeatherServices().getCityWeather("Bogor");
+    var weatherData = await WeatherServices().getLocationWeather();
     print(weatherData.toString());
 
     Future.delayed(Duration(seconds: 3)).then((value) => Navigator.push(

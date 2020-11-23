@@ -13,18 +13,18 @@ class WeatherServices {
     return weatherData;
   }
 
-  // Future<dynamic> getLocationWeather() async {
-  //   Location location = Location();
-  //   await location.getCurrentLocation();
-  //   print("latitude" + location.latitude.toString());
-  //   print("longitude" + location.longitude.toString());
-  //
-  //   Network networkHelper = Network(
-  //       '$apiUrl?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
-  //
-  //   var weatherData = await networkHelper.getData();
-  //   return weatherData;
-  // }
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+    print("latitude" + location.latitude.toString());
+    print("longitude" + location.longitude.toString());
+
+    Network networkHelper = Network(
+        '$apiUrl?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
+
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
 
   String getWeatherBackground(String condition) {
     switch (condition) {

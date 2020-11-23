@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:wewether/widgets/bgimage.dart';
-import 'package:wewether/widgets/myappbar.dart';
 
+import 'services/weather_services.dart';
 import 'widgets/details.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   dynamic weatherData;
+  String cityName;
 
   @override
   void initState() {
@@ -36,7 +34,19 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Stack(
                   children: [
-                    BgImage(condition : weatherData['weather'][0]['main'].toString()),
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(WeatherServices()
+                              .getWeatherBackground(weatherData['weather'][0]
+                                      ['main']
+                                  .toString())),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 140, left: 20, right: 20),
@@ -63,8 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ],
                               ),
-                              // Image.network("https://www.flaticon.com/svg/static/icons/svg/615/615500.svg")
-                              // Text("☁️", style: TextStyle(fontSize: 100),)
                             ],
                           ),
                           Text(
@@ -91,9 +99,63 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: const EdgeInsets.only(top: 32, left: 8, right: 8),
-              child: MyAppbar(weatherData)),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      icon: Icon(
+                        Icons.menu,
+                        color: Colors.transparent,
+                      ),
+                      onPressed: null),
+                  Text(
+                    weatherData['name'],
+                    style: TextStyle(color: Colors.white, fontSize: 26),
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => _showDialogEditLocation(context)),
+                ],
+              )),
         ],
       ),
     );
+  }
+
+  _showDialogEditLocation(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Ubah Lokasi"),
+            content: TextField(
+              onChanged: (value) {
+                cityName = value;
+              },
+              decoration: InputDecoration(hintText: "Lokasi"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: new Text("Batal")),
+              new FlatButton(
+                  onPressed: () => Navigator.pop(context, () {
+                        setState(() async {
+                          weatherData =
+                              await WeatherServices().getCityWeather(cityName);
+                        });
+                      }),
+                  child: new Text("Ok")),
+            ],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+          );
+        });
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wewether/splash_screen.dart';
-
-import 'myhomepage.dart';
+import 'package:wewether/pages/splash_screen.dart';
 
 void main() {
   runApp(MyApp());

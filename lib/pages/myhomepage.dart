@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'services/weather_services.dart';
-import 'widgets/details.dart';
+import '../services/weather_services.dart';
+import '../widgets/details.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({this.weather});

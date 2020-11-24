@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wewether/myhomepage.dart';
+import 'package:wewether/pages/myhomepage.dart';
 import 'package:wewether/services/weather_services.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var weatherData = await WeatherServices().getLocationWeather();
     print(weatherData.toString());
 
-    Future.delayed(Duration(seconds: 3)).then((value) => Navigator.push(
+    Future.delayed(Duration(seconds: 3)).then((value) => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => MyHomePage(weather: weatherData))));
